@@ -1,21 +1,24 @@
 let highestZ = 1;
 
 class Paper {
-  holdingPaper = false;
-  touchX = 0;
-  touchY = 0;
-  mouseX = 0;
-  mouseY = 0;
-  prevMouseX = 0;
-  prevMouseY = 0;
-  velX = 0;
-  velY = 0;
-  rotation = Math.random() * 30 - 15;
-  currentPaperX = 0;
-  currentPaperY = 0;
-  rotating = false;
+  constructor(paper) {
+    this.paper = paper;
+    this.holdingPaper = false;
+    this.touchX = 0;
+    this.touchY = 0;
+    this.mouseX = 0;
+    this.mouseY = 0;
+    this.prevMouseX = 0;
+    this.prevMouseY = 0;
+    this.velX = 0;
+    this.velY = 0;
+    this.rotation = Math.random() * 30 - 15;
+    this.currentPaperX = 0;
+    this.currentPaperY = 0;
+    this.rotating = false;
+  }
 
-  init(paper) {
+  init() {
     // Handle Mouse Move
     document.addEventListener("mousemove", (e) => this.movePaper(e));
 
@@ -23,10 +26,10 @@ class Paper {
     document.addEventListener("touchmove", (e) => this.movePaper(e));
 
     // Mouse Down Event
-    paper.addEventListener("mousedown", (e) => this.startDrag(e));
+    this.paper.addEventListener("mousedown", (e) => this.startDrag(e));
 
     // Touch Start Event
-    paper.addEventListener("touchstart", (e) => this.startDrag(e));
+    this.paper.addEventListener("touchstart", (e) => this.startDrag(e));
 
     // Mouse Up Event
     window.addEventListener("mouseup", () => this.endDrag());
@@ -72,7 +75,7 @@ class Paper {
       }
       this.prevMouseX = this.mouseX;
       this.prevMouseY = this.mouseY;
-      paper.style.transform = `translateX(${this.currentPaperX}px) translateY(${this.currentPaperY}px) rotateZ(${this.rotation}deg)`;
+      this.paper.style.transform = `translateX(${this.currentPaperX}px) translateY(${this.currentPaperY}px) rotateZ(${this.rotation}deg)`;
     }
   }
 
@@ -92,7 +95,7 @@ class Paper {
     }
 
     this.holdingPaper = true;
-    e.target.style.zIndex = highestZ++;
+    this.paper.style.zIndex = highestZ++;
     this.touchX = clientX;
     this.touchY = clientY;
     this.prevMouseX = clientX;
@@ -109,8 +112,8 @@ class Paper {
   }
 }
 
-const papers = Array.from(document.querySelectorAll(".paper"));
-papers.forEach((paper) => {
-  const p = new Paper();
-  p.init(paper);
+// Select all .paper elements and apply the drag functionality
+document.querySelectorAll(".paper").forEach((paper) => {
+  const p = new Paper(paper);
+  p.init();
 });
